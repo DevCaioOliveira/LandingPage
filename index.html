@@ -1,1741 +1,1142 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Caio Felipe Braga de Oliveira | Front-End & UI/UX Designer Sênior</title>
-  
-  <!-- Fontes do Google: Plus Jakarta Sans para leitura moderna & JetBrains Mono para código/detalhes -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-  <style>
-    /* ==========================================================================
-       1. CSS CUSTOM PROPERTIES (TEMA & DESIGN TOKENS 2026)
-       ========================================================================== */
-    :root {
-      /* Cores Base da Identidade Visual */
-      --bg-primary: #080c1c;       /* Azul Escuro Profundo / Background Main */
-      --bg-secondary: #0d132c;     /* Tom ligeiramente mais claro para cards */
-      --accent-brand: #64bcac;     /* Menta / Ciano Neon Principal */
-      --accent-glow: #7ee0cf;      /* Glow Neon Secundário */
-      --secondary-dark: #2c2c64;   /* Roxo / Índigo Neon Profundo */
-      --text-main: #f4fcfc;        /* Branco Ártico com leve toque de ciano */
-      --text-muted: #94a3b8;       /* Texto Secundário Neutro */
-      
-      /* Glassmorphism Tokens */
-      --glass-bg: rgba(13, 19, 44, 0.55);
-      --glass-border: rgba(100, 188, 172, 0.15);
-      --glass-border-hover: rgba(100, 188, 172, 0.4);
-      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      
-      /* Gradientes Modernos */
-      --gradient-brand: linear-gradient(135deg, var(--accent-brand) 0%, #3a7bd5 100%);
-      --gradient-purple: linear-gradient(135deg, #7928ca 0%, #ff0080 100%);
-      --gradient-glow: radial-gradient(circle at 50% 50%, rgba(100, 188, 172, 0.15), transparent 70%);
-
-      /* Tipografia */
-      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
-
-      /* Layout & Espaçamento */
-      --nav-height: 80px;
-      --container-max: 1240px;
-      --radius-sm: 8px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
-      --radius-full: 9999px;
-
-      /* Transições Fluídas */
-      --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      --transition-normal: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* Reset & Base */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      font-family: var(--font-sans);
-      background-color: var(--bg-primary);
-      color: var(--text-main);
-      overflow-x: hidden;
-      selection-background-color: var(--accent-brand);
-      selection-color: var(--bg-primary);
-    }
-
-    ::selection {
-      background: var(--accent-brand);
-      color: var(--bg-primary);
-    }
-
-    body {
-      line-height: 1.6;
-      background-color: var(--bg-primary);
-      position: relative;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* Ambient Background Glow Effects */
-    .ambient-glow {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(120px);
-      z-index: -1;
-      pointer-events: none;
-      opacity: 0.35;
-      animation: pulseGlow 10s infinite alternate ease-in-out;
-    }
-
-    .glow-1 {
-      top: -10%;
-      left: -10%;
-      width: 50vw;
-      height: 50vw;
-      background: var(--secondary-dark);
-    }
-
-    .glow-2 {
-      bottom: 10%;
-      right: -10%;
-      width: 45vw;
-      height: 45vw;
-      background: rgba(100, 188, 172, 0.2);
-    }
-
-    @keyframes pulseGlow {
-      0% { transform: scale(1) translate(0, 0); opacity: 0.25; }
-      100% { transform: scale(1.15) translate(30px, -20px); opacity: 0.4; }
-    }
-
-    /* Container Global */
-    .container {
-      width: 100%;
-      max-width: var(--container-max);
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
-
-    section {
-      padding: 6rem 0;
-      position: relative;
-    }
-
-    /* Utilidades de Texto & Títulos */
-    .section-header {
-      text-align: center;
-      max-width: 700px;
-      margin: 0 auto 4rem auto;
-    }
-
-    .section-subtitle {
-      font-family: var(--font-mono);
-      color: var(--accent-brand);
-      font-size: 0.9rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 0.75rem;
-      display: inline-block;
-    }
-
-    .section-title {
-      font-size: clamp(2rem, 4vw, 2.75rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      color: var(--text-main);
-    }
-
-    .text-gradient {
-      background: linear-gradient(135deg, var(--text-main) 30%, var(--accent-brand) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    /* Componente Glassmorphic Card */
-    .glass-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-md);
-      box-shadow: var(--glass-shadow);
-      transition: all var(--transition-normal);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .glass-card:hover {
-      border-color: var(--glass-border-hover);
-      box-shadow: 0 12px 40px 0 rgba(100, 188, 172, 0.15);
-      transform: translateY(-4px);
-    }
-
-    /* Botões Padrão */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      padding: 0.85rem 1.8rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      border-radius: var(--radius-full);
-      text-decoration: none;
-      cursor: pointer;
-      transition: all var(--transition-fast);
-      border: none;
-      outline: none;
-      font-family: var(--font-sans);
-    }
-
-    .btn-primary {
-      background: var(--accent-brand);
-      color: var(--bg-primary);
-      box-shadow: 0 4px 20px rgba(100, 188, 172, 0.35);
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-glow);
-      box-shadow: 0 6px 28px rgba(100, 188, 172, 0.55);
-      transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-main);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: blur(10px);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: var(--accent-brand);
-      color: var(--accent-brand);
-      transform: translateY(-2px);
-    }
-
-    /* ==========================================================================
-       2. HEADER & NAVEGAÇÃO
-       ========================================================================== */
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: var(--nav-height);
-      z-index: 1000;
-      transition: all var(--transition-normal);
-    }
-
-    .header.scrolled {
-      background: rgba(8, 12, 28, 0.8);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--glass-border);
-      height: 70px;
-    }
-
-    .nav-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 100%;
-    }
-
-    /* Logo Styling */
-    .logo {
-      font-size: 1.4rem;
-      font-weight: 800;
-      text-decoration: none;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      letter-spacing: -0.5px;
-    }
-
-    .logo-accent {
-      color: var(--accent-brand);
-    }
-
-    /* Link Menu */
-    .nav-menu {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-link {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: color var(--transition-fast);
-      position: relative;
-      padding: 0.5rem 0;
-    }
-
-    .nav-link:hover, .nav-link.active {
-      color: var(--accent-brand);
-    }
-
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0%;
-      height: 2px;
-      background: var(--accent-brand);
-      transition: width var(--transition-normal);
-      border-radius: var(--radius-full);
-    }
-
-    .nav-link.active::after, .nav-link:hover::after {
-      width: 100%;
-    }
-
-    /* Mobile Toggle */
-    .mobile-toggle {
-      display: none;
-      background: none;
-      border: none;
-      color: var(--text-main);
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    /* ==========================================================================
-       3. HERO SECTION
-       ========================================================================== */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding-top: calc(var(--nav-height) + 2rem);
-      position: relative;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.4rem 1rem;
-      border-radius: var(--radius-full);
-      background: rgba(100, 188, 172, 0.1);
-      border: 1px solid rgba(100, 188, 172, 0.25);
-      color: var(--accent-brand);
-      font-size: 0.85rem;
-      font-family: var(--font-mono);
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-badge .pulse-dot {
-      width: 8px;
-      height: 8px;
-      background-color: var(--accent-brand);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--accent-brand);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(100, 188, 172, 0.7); }
-      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(100, 188, 172, 0); }
-      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(100, 188, 172, 0); }
-    }
-
-    .hero-title {
-      font-size: clamp(2.5rem, 5vw, 4.2rem);
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 1.2rem;
-      letter-spacing: -0.03em;
-    }
-
-    .typewriter-container {
-      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-      font-weight: 600;
-      color: var(--accent-brand);
-      font-family: var(--font-mono);
-      min-height: 2.2rem;
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-    }
-
-    .typewriter-cursor {
-      display: inline-block;
-      width: 3px;
-      height: 1.2em;
-      background-color: var(--accent-brand);
-      margin-left: 4px;
-      animation: blink 0.8s infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    .hero-description {
-      font-size: 1.1rem;
-      color: var(--text-muted);
-      margin-bottom: 2.5rem;
-      max-width: 580px;
-      line-height: 1.7;
-    }
-
-    .hero-ctas {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    /* Hero Visual Card 3D Frame */
-    .hero-visual {
-      position: relative;
-      display: flex;
-      justify-content: center;
-    }
-
-    .hero-avatar-frame {
-      position: relative;
-      width: 320px;
-      height: 380px;
-      border-radius: var(--radius-lg);
-      background: linear-gradient(145deg, rgba(100, 188, 172, 0.2), rgba(44, 44, 100, 0.4));
-      padding: 12px;
-      border: 1px solid var(--glass-border);
-      backdrop-filter: blur(20px);
-      transform: rotate(-2deg);
-      transition: transform var(--transition-normal);
-    }
-
-    .hero-avatar-frame:hover {
-      transform: rotate(0deg) scale(1.02);
-    }
-
-    .hero-avatar-inner {
-      width: 100%;
-      height: 100%;
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      background: var(--secondary-dark);
-      position: relative;
-    }
-
-    .hero-avatar-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: saturate(1.1) contrast(1.05);
-    }
-
-    .floating-code-tag {
-      position: absolute;
-      padding: 0.6rem 1.2rem;
-      background: rgba(8, 12, 28, 0.85);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: blur(12px);
-      border-radius: var(--radius-md);
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--accent-brand);
-      box-shadow: var(--glass-shadow);
-      z-index: 10;
-      animation: float 4s infinite ease-in-out;
-    }
-
-    .tag-1 { top: -20px; right: -20px; animation-delay: 0s; }
-    .tag-2 { bottom: -20px; left: -20px; animation-delay: 2s; }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-
-    /* ==========================================================================
-       4. SOBRE MIM & STATS
-       ========================================================================== */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: start;
-    }
-
-    .about-text p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      margin-bottom: 1.5rem;
-      line-height: 1.8;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    .stat-card {
-      padding: 1.5rem;
-      text-align: center;
-    }
-
-    .stat-number {
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: var(--accent-brand);
-      font-family: var(--font-mono);
-      display: block;
-      margin-bottom: 0.25rem;
-    }
-
-    .stat-label {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    /* Habilidades Interativas */
-    .skills-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .skills-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 1rem;
-    }
-
-    .skill-card {
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      text-align: center;
-      border-radius: var(--radius-md);
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      transition: all var(--transition-fast);
-    }
-
-    .skill-card i {
-      font-size: 1.8rem;
-      color: var(--accent-brand);
-    }
-
-    .skill-card span {
-      font-size: 0.85rem;
-      font-weight: 600;
-    }
-
-    .skill-card:hover {
-      border-color: var(--accent-brand);
-      background: rgba(100, 188, 172, 0.08);
-      transform: translateY(-3px);
-    }
-
-    /* ==========================================================================
-       5. EXPERIÊNCIAS PROFISSIONAIS (TIMELINE MODULAR)
-       ========================================================================== */
-    .timeline {
-      position: relative;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    /* Linha Central da Timeline */
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 20px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(180deg, var(--accent-brand) 0%, var(--secondary-dark) 100%);
-      border-radius: var(--radius-full);
-    }
-
-    @media (min-width: 768px) {
-      .timeline::before {
-        left: 50%;
-        transform: translateX(-50%);
-      }
-    }
-
-    .timeline-item {
-      position: relative;
-      margin-bottom: 3rem;
-      width: 100%;
-    }
-
-    .timeline-item:last-child {
-      margin-bottom: 0;
-    }
-
-    /* Ponto da Timeline */
-    .timeline-dot {
-      position: absolute;
-      left: 20px;
-      top: 24px;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: var(--bg-primary);
-      border: 3px solid var(--accent-brand);
-      box-shadow: 0 0 12px var(--accent-brand);
-      z-index: 5;
-      transform: translateX(-50%);
-    }
-
-    @media (min-width: 768px) {
-      .timeline-dot {
-        left: 50%;
-      }
-    }
-
-    .timeline-content {
-      margin-left: 50px;
-      padding: 1.8rem;
-    }
-
-    @media (min-width: 768px) {
-      .timeline-item:nth-child(odd) .timeline-content {
-        width: calc(50% - 40px);
-        margin-left: 0;
-      }
-
-      .timeline-item:nth-child(even) .timeline-content {
-        width: calc(50% - 40px);
-        margin-left: calc(50% + 40px);
-      }
-    }
-
-    .timeline-date {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--accent-brand);
-      font-weight: 600;
-      margin-bottom: 0.4rem;
-      display: inline-block;
-      padding: 0.2rem 0.6rem;
-      background: rgba(100, 188, 172, 0.1);
-      border-radius: var(--radius-sm);
-    }
-
-    .timeline-role {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 0.2rem;
-    }
-
-    .timeline-company {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-      font-weight: 500;
-    }
-
-    .timeline-description {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-
-    .timeline-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .tech-tag {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      padding: 0.2rem 0.6rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-sm);
-      color: var(--text-main);
-    }
-
-    /* ==========================================================================
-       6. PROJETOS (SISTEMA DE FILTRO & CARDS MODULARES)
-       ========================================================================== */
-    .filter-container {
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin-bottom: 3rem;
-    }
-
-    .filter-btn {
-      padding: 0.6rem 1.4rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      border-radius: var(--radius-full);
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all var(--transition-fast);
-    }
-
-    .filter-btn:hover, .filter-btn.active {
-      background: var(--accent-brand);
-      color: var(--bg-primary);
-      border-color: var(--accent-brand);
-      box-shadow: 0 4px 15px rgba(100, 188, 172, 0.3);
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 2rem;
-    }
-
-    .project-card {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    .project-card.hide {
-      display: none;
-    }
-
-    .project-img-wrapper {
-      position: relative;
-      width: 100%;
-      height: 200px;
-      overflow: hidden;
-      border-bottom: 1px solid var(--glass-border);
-    }
-
-    .project-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform var(--transition-normal);
-    }
-
-    .project-card:hover .project-img {
-      transform: scale(1.08);
-    }
-
-    .project-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(8, 12, 28, 0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      opacity: 0;
-      transition: opacity var(--transition-fast);
-      backdrop-filter: blur(4px);
-    }
-
-    .project-card:hover .project-overlay {
-      opacity: 1;
-    }
-
-    .project-body {
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-
-    .project-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      color: var(--text-main);
-    }
-
-    .project-desc {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 1.25rem;
-      flex-grow: 1;
-      line-height: 1.6;
-    }
-
-    .project-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: auto;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    /* ==========================================================================
-       7. CONTATO (FORMULÁRIO MODERNO E VALIDAÇÃO REAL-TIME)
-       ========================================================================== */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
-      gap: 3rem;
-    }
-
-    .contact-info-card {
-      padding: 2.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1.25rem;
-    }
-
-    .contact-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: var(--radius-md);
-      background: rgba(100, 188, 172, 0.1);
-      border: 1px solid rgba(100, 188, 172, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      color: var(--accent-brand);
-      flex-shrink: 0;
-    }
-
-    .contact-details h4 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 0.2rem;
-    }
-
-    .contact-details p, .contact-details a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.95rem;
-      transition: color var(--transition-fast);
-    }
-
-    .contact-details a:hover {
-      color: var(--accent-brand);
-    }
-
-    .social-links {
-      display: flex;
-      gap: 1rem;
-      margin-top: auto;
-      padding-top: 1rem;
-    }
-
-    .social-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-main);
-      text-decoration: none;
-      transition: all var(--transition-fast);
-    }
-
-    .social-icon:hover {
-      background: var(--accent-brand);
-      color: var(--bg-primary);
-      transform: translateY(-3px);
-    }
-
-    /* Form Design */
-    .contact-form {
-      padding: 2.5rem;
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-      position: relative;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: var(--text-main);
-    }
-
-    .form-input, .form-textarea {
-      width: 100%;
-      padding: 0.85rem 1.2rem;
-      background: rgba(8, 12, 28, 0.6);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-md);
-      color: var(--text-main);
-      font-family: var(--font-sans);
-      font-size: 0.95rem;
-      outline: none;
-      transition: all var(--transition-fast);
-    }
-
-    .form-textarea {
-      resize: vertical;
-      min-height: 130px;
-    }
-
-    .form-input:focus, .form-textarea:focus {
-      border-color: var(--accent-brand);
-      box-shadow: 0 0 0 3px rgba(100, 188, 172, 0.15);
-    }
-
-    /* Visual Validation States */
-    .form-group.error .form-input,
-    .form-group.error .form-textarea {
-      border-color: #ff4757;
-    }
-
-    .form-group.success .form-input,
-    .form-group.success .form-textarea {
-      border-color: #2ed573;
-    }
-
-    .error-text {
-      font-size: 0.75rem;
-      color: #ff4757;
-      margin-top: 0.35rem;
-      display: none;
-    }
-
-    .form-group.error .error-text {
-      display: block;
-    }
-
-    .form-status {
-      margin-top: 1rem;
-      padding: 1rem;
-      border-radius: var(--radius-md);
-      font-size: 0.9rem;
-      display: none;
-      text-align: center;
-    }
-
-    .form-status.success {
-      display: block;
-      background: rgba(46, 213, 115, 0.15);
-      border: 1px solid #2ed573;
-      color: #2ed573;
-    }
-
-    /* ==========================================================================
-       8. FOOTER & BACK TO TOP
-       ========================================================================== */
-    .footer {
-      padding: 3rem 0;
-      border-top: 1px solid var(--glass-border);
-      background: rgba(8, 12, 28, 0.9);
-      margin-top: 4rem;
-    }
-
-    .footer-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-      text-align: center;
-    }
-
-    @media (min-width: 768px) {
-      .footer-container {
-        flex-direction: row;
-        justify-content: space-between;
-        text-align: left;
-      }
-    }
-
-    .footer-copy {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .back-to-top {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--accent-brand);
-      color: var(--bg-primary);
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(100, 188, 172, 0.4);
-      opacity: 0;
-      visibility: hidden;
-      transition: all var(--transition-normal);
-      z-index: 99;
-    }
-
-    .back-to-top.visible {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .back-to-top:hover {
-      transform: translateY(-50%);
-      background: var(--accent-glow);
-    }
-
-    /* ==========================================================================
-       9. RESPONSIVIDADE (MEDIA QUERIES)
-       ========================================================================== */
-    @media (max-width: 992px) {
-      .hero-grid, .about-grid, .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-      }
-
-      .hero-visual {
-        order: -1;
-      }
-
-      .hero-avatar-frame {
-        width: 260px;
-        height: 320px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .mobile-toggle {
-        display: block;
-      }
-
-      .nav-menu {
-        position: fixed;
-        top: var(--nav-height);
-        left: 0;
-        width: 100%;
-        background: rgba(8, 12, 28, 0.95);
-        backdrop-filter: blur(20px);
-        flex-direction: column;
-        padding: 2rem;
-        gap: 1.5rem;
-        border-bottom: 1px solid var(--glass-border);
-        transform: translateY(-150%);
-        transition: transform var(--transition-normal);
-      }
-
-      .nav-menu.active {
-        transform: translateY(0);
-      }
-
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JCG-CODE: Portfolio</title>
+    <!-- Fonte moderna do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome para ícones modernos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==========================================================================
+           VARIÁVEIS DE IDENTIDADE VISUAL (2026 Design System)
+           ========================================================================== */
+        :root {
+            --bg-main: #080c1c;
+            --primary: #64bcac;
+            --primary-glow: rgba(100, 188, 172, 0.25);
+            --surface: #2c2c64;
+            --surface-glass: rgba(44, 44, 100, 0.45);
+            --text-main: #f4fcfc;
+            --text-muted: #a0aec0;
+            --border-glass: rgba(100, 188, 172, 0.18);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* RESET E CONFIGURAÇÕES GLOBAIS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Efeito de Fundo Futurista / Glow */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(100, 188, 172, 0.08) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -20%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(44, 44, 100, 0.25) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* UTILITÁRIOS */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 6rem 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            text-align: center;
+            letter-spacing: -0.02em;
+        }
+
+        .section-title span {
+            color: var(--primary);
+        }
+
+        /* ==========================================================================
+           1. HEADER / NAVEGAÇÃO
+           ========================================================================== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(8, 12, 28, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glass);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5r em;
+            text-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .logo span {
+            color: var(--text-main);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+
+        /* ==========================================================================
+           2. HERO SECTION (INÍCIO)
+           ========================================================================== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--surface-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 2vw, 1.75rem);
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .hero-subtitle span {
+            color: var(--primary);
+            border-right: 2px solid var(--primary);
+            padding-right: 4px;
+            animation: blink 0.75s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { border-color: transparent; }
+            50% { border-color: var(--primary); }
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--bg-main);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px var(--primary);
+        }
+
+        .btn-secondary {
+            background: var(--surface-glass);
+            color: var(--text-main);
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* ==========================================================================
+           3. SOBRE MIM
+           ========================================================================== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-card {
+            background: var(--surface-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .about-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .info-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--text-main);
+            text-align: right;
+        }
+
+        .info-value a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .info-value a:hover {
+            text-decoration: underline;
+        }
+
+        .about-text p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .tech-tag {
+            background: rgba(100, 188, 172, 0.1);
+            color: var(--primary);
+            border: 1px solid var(--border-glass);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-family: 'Fira Code', monospace;
+            font-weight: 500;
+        }
+
+        /* ==========================================================================
+           4. EXPERIÊNCIAS PROFISSIONAIS (Timeline Modular)
+           ========================================================================== */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 30px;
+            height: 100%;
+            width: 2px;
+            background: var(--border-glass);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            padding-left: 80px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 21px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 4px solid var(--bg-main);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .timeline-content {
+            background: var(--surface-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(12px);
+            transition: var(--transition);
+        }
+
+        .timeline-content:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .timeline-date {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-company {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .timeline-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ==========================================================================
+           5. PROJETOS (Modular e Filtrável via JS)
+           ========================================================================== */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--surface-glass);
+            border: 1px solid var(--border-glass);
+            color: var(--text-muted);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            color: var(--bg-main);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--surface-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(12px);
+            transition: var(--transition);
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+
+        .project-header {
+            padding: 2rem 2rem 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .project-icon {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-links a {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .project-links a:hover {
+            color: var(--primary);
+        }
+
+        .project-body {
+            padding: 0 2rem 2rem 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .project-tag {
+            font-size: 0.75rem;
+            font-family: 'Fira Code', monospace;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            color: var(--text-muted);
+        }
+
+        /* ==========================================================================
+           6. CONTATO (DESTAQUE MÁXIMO)
+           ========================================================================== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+        }
+
+        .contact-info-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-card-item {
+            background: var(--surface-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            text-decoration: none;
+            color: var(--text-main);
+            backdrop-filter: blur(12px);
+            transition: var(--transition);
+        }
+
+        .contact-card-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px var(--primary-glow);
+        }
+
+        .contact-card-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(100, 188, 172, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .contact-card-details h4 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+        }
+
+        .contact-card-details p {
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .contact-form {
+            background: var(--surface-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(16px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            background: rgba(8, 12, 28, 0.6);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 0.875rem 1rem;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-feedback {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            text-align: center;
+            display: none;
+        }
+
+        /* ==========================================================================
+           7. FOOTER
+           ========================================================================== */
+        footer {
+            background: rgba(4, 6, 14, 0.95);
+            border-top: 1px solid var(--border-glass);
+            padding: 2.5rem 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer span {
+            color: var(--primary);
+        }
+
+        /* ==========================================================================
+           RESPONSIVIDADE (MEDIA QUERIES)
+           ========================================================================== */
+        @media (max-width: 968px) {
+            .about-grid, .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: rgba(8, 12, 28, 0.98);
+                flex-direction: column;
+                justify-content: center;
+                transition: var(--transition);
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .hamburger {
+                display: block;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Elementos de Iluminação / Background Glow -->
-  <div class="ambient-glow glow-1"></div>
-  <div class="ambient-glow glow-2"></div>
-
-  <!-- ==========================================================================
-     1. HEADER / NAVEGAÇÃO
-     ========================================================================== -->
-  <header class="header" id="header">
-    <div class="container nav-container">
-      
-      <!-- INSERIR LOGO AQUI -->
-      <a href="#hero" class="logo">
-        <span class="logo-accent">&lt;</span>JCG studio<span class="logo-accent">/&gt;</span>
-      </a>
-
-      <!-- Botão Menu Hamburger Mobile -->
-      <button class="mobile-toggle" id="mobile-toggle" aria-label="Abrir Menu">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-
-      <!-- Menu Principal -->
-      <nav>
-        <ul class="nav-menu" id="nav-menu">
-          <li><a href="#hero" class="nav-link active">Início</a></li>
-          <li><a href="#about" class="nav-link">Sobre</a></li>
-          <li><a href="#experience" class="nav-link">Experiência</a></li>
-          <li><a href="#projects" class="nav-link">Projetos</a></li>
-          <li><a href="#contact" class="nav-link">Contato</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <main>
     <!-- ==========================================================================
-       2. HERO SECTION
+       HEADER / NAVEGAÇÃO
        ========================================================================== -->
-    <section class="hero" id="hero">
-      <div class="container hero-grid">
-        <div class="hero-content">
-          <div class="hero-badge">
-            <span class="pulse-dot"></span>
-            <span>Disponível para novos projetos</span>
-          </div>
-
-          <!-- SEU NOME PERSONALIZADO -->
-          <h1 class="hero-title">
-            Olá, eu sou <br>
-            <span class="text-gradient">Caio Felipe</span>
-          </h1>
-
-          <!-- Efeito de Digitação JS -->
-          <div class="typewriter-container">
-            <span id="typewriter-text"></span>
-            <span class="typewriter-cursor"></span>
-          </div>
-
-          <!-- BIO RESUMIDA -->
-          <p class="hero-description">
-            Especializado na criação de interfaces digitais de alta performance, Design Systems escaláveis e experiências web imersivas combinando estética moderna de 2026 com engenharia limpa.
-          </p>
-
-          <div class="hero-ctas">
-            <a href="#projects" class="btn btn-primary">
-              Ver Projetos <i class="fa-solid fa-arrow-right"></i>
-            </a>
-            <a href="#contact" class="btn btn-secondary">
-              Falar Comigo <i class="fa-regular fa-paper-plane"></i>
-            </a>
-          </div>
+    <header>
+        <div class="container nav-container">
+            <a href="#inicio" class="logo">&lt;<span>JCG</span>/&gt;</a>
+            <ul class="nav-menu">
+                <li><a href="#inicio" class="nav-link active">Início</a></li>
+                <li><a href="#sobre" class="nav-link">Sobre</a></li>
+                <li><a href="#experiencias" class="nav-link">Experiências</a></li>
+                <li><a href="#projetos" class="nav-link">Projetos</a></li>
+                <li><a href="#contato" class="nav-link">Contato</a></li>
+            </ul>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
         </div>
+    </header>
 
-        <div class="hero-visual">
-          <div class="hero-avatar-frame">
-            <div class="floating-code-tag tag-1">&lt;UI/UX Designer&gt;</div>
-            <div class="hero-avatar-inner">
-              <!-- SEU LINK DE FOTO AQUI -->
-              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Caio Felipe Braga de Oliveira" class="hero-avatar-img">
-            </div>
-            <div class="floating-code-tag tag-2">Frontend_Dev.js</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-       3. SOBRE MIM
-       ========================================================================== -->
-    <section id="about">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-subtitle">// Conheça minha trajetória</span>
-          <h2 class="section-title">Sobre Mim</h2>
-        </div>
-
-        <div class="about-grid">
-          <div class="about-text">
-            <p>
-              Sou <strong>Caio Felipe Braga de Oliveira</strong>, Engenheiro de Software Front-End e UI/UX Designer Sênior com vasta experiência no desenvolvimento de aplicações web responsivas, acessíveis e orientadas à melhor performance do usuário.
-            </p>
-            <p>
-              Minha missão é unir a elegância do design moderno com a solidez da arquitetura de software, transformando ideias complexas em produtos digitais de alto impacto visual e funcional.
-            </p>
-
-            <!-- Estatísticas / Destaques -->
-            <div class="stats-grid">
-              <div class="glass-card stat-card">
-                <span class="stat-number" data-target="7">0</span>
-                <span class="stat-label">Anos de Exp.</span>
-              </div>
-              <div class="glass-card stat-card">
-                <span class="stat-number" data-target="45">0</span>
-                <span class="stat-label">Projetos Entregues</span>
-              </div>
-              <div class="glass-card stat-card">
-                <span class="stat-number" data-target="99">0</span>
-                <span class="stat-label">% Satisfação</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Grade de Skills Interativa -->
-          <div class="skills-container">
-            <h3 class="skills-title">Tecnologias & Habilidades</h3>
-            <div class="skills-grid" id="skills-grid">
-              <!-- Renderizado via JavaScript / Modular -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-       4. EXPERIÊNCIAS PROFISSIONAIS (TIMELINE MODULAR)
-       ========================================================================== -->
-    <section id="experience">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-subtitle">// Carreira e Conquistas</span>
-          <h2 class="section-title">Experiência Profissional</h2>
-        </div>
-
-        <div class="timeline" id="timeline-container">
-          <!-- O conteúdo da timeline é renderizado dinamicamente via JS (ou copiado/colado facilmente) -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-       5. PROJETOS (SISTEMA DINÂMICO DE FILTROS)
-       ========================================================================== -->
-    <section id="projects">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-subtitle">// Portfólio Selecionado</span>
-          <h2 class="section-title">Projetos em Destaque</h2>
-        </div>
-
-        <!-- Botões de Filtro -->
-        <div class="filter-container">
-          <button class="filter-btn active" data-filter="all">Todos</button>
-          <button class="filter-btn" data-filter="web">Web Development</button>
-          <button class="filter-btn" data-filter="uiux">UI/UX Design</button>
-          <button class="filter-btn" data-filter="mobile">Mobile Apps</button>
-          <button class="filter-btn" data-filter="automation">Automação</button>
-        </div>
-
-        <!-- Grid de Projetos Modulares -->
-        <div class="projects-grid" id="projects-grid">
-          <!-- Cards injetados via JavaScript / Podem ser modificados no Array 'projectsData' -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-       6. CONTATO
-       ========================================================================== -->
-    <section id="contact">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-subtitle">// Vamos Conversar</span>
-          <h2 class="section-title">Entre em Contato</h2>
-        </div>
-
-        <div class="contact-grid">
-          <!-- Informações de Contato Rápidas -->
-          <div class="glass-card contact-info-card">
-            <h3>Vamos criar algo incrível juntos?</h3>
-            <p style="color: var(--text-muted);">Estou disponível para projetos freelance, consultorias e oportunidades em tempo integral.</p>
-
-            <div class="contact-item">
-              <div class="contact-icon"><i class="fa-regular fa-envelope"></i></div>
-              <div class="contact-details">
-                <h4>E-mail</h4>
-                <a href="mailto:caio.felipe@exemplo.com">caio.felipe@exemplo.com</a>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
-              <div class="contact-details">
-                <h4>Localização</h4>
-                <p>Curitiba, PR - Brasil (Atuação remota global)</p>
-              </div>
-            </div>
-
-            <!-- Links de Redes Sociais -->
-            <div class="social-links">
-              <!-- COLOQUE SEUS LINKS DAS REDES SOCIAIS AQUI -->
-              <a href="https://github.com" target="_blank" class="social-icon" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-              <a href="https://linkedin.com" target="_blank" class="social-icon" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-              <a href="https://twitter.com" target="_blank" class="social-icon" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
-              <a href="https://instagram.com" target="_blank" class="social-icon" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            </div>
-          </div>
-
-          <!-- Formulário com Validação Interativa em Tempo Real -->
-          <form class="glass-card contact-form" id="contact-form" novalidate>
-            <div class="form-group" id="group-name">
-              <label for="name" class="form-label">Seu Nome</label>
-              <input type="text" id="name" class="form-input" placeholder="Ex: Maria Silva" required>
-              <span class="error-text">Por favor, informe seu nome.</span>
-            </div>
-
-            <div class="form-group" id="group-email">
-              <label for="email" class="form-label">Seu E-mail</label>
-              <input type="email" id="email" class="form-input" placeholder="Ex: maria@exemplo.com" required>
-              <span class="error-text">Informe um e-mail válido.</span>
-            </div>
-
-            <div class="form-group" id="group-subject">
-              <label for="subject" class="form-label">Assunto</label>
-              <input type="text" id="subject" class="form-input" placeholder="Ex: Novo Projeto Web" required>
-              <span class="error-text">Informe o assunto da mensagem.</span>
-            </div>
-
-            <div class="form-group" id="group-message">
-              <label for="message" class="form-label">Mensagem</label>
-              <textarea id="message" class="form-textarea" placeholder="Descreva brevemente sua ideia ou projeto..." required></textarea>
-              <span class="error-text">Escreva sua mensagem.</span>
-            </div>
-
-            <button type="submit" class="btn btn-primary" style="width: 100%;">
-              Enviar Mensagem <i class="fa-solid fa-paper-plane"></i>
-            </button>
-
-            <div class="form-status" id="form-status"></div>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- ==========================================================================
-     7. FOOTER
-     ========================================================================== -->
-  <footer class="footer">
-    <div class="container footer-container">
-      <div class="footer-copy">
-        &copy; 2026 <strong>Caio Felipe Braga de Oliveira | JCG studio</strong>. Todos os direitos reservados.
-      </div>
-      <div class="footer-links">
-        <a href="#hero" class="nav-link" style="font-size:0.85rem;">Início</a> &bull; 
-        <a href="#projects" class="nav-link" style="font-size:0.85rem;">Projetos</a> &bull; 
-        <a href="#contact" class="nav-link" style="font-size:0.85rem;">Contato</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Botão Voltar ao Topo -->
-  <button class="back-to-top" id="back-to-top" aria-label="Voltar ao topo">
-    <i class="fa-solid fa-arrow-up"></i>
-  </button>
-
-  <!-- ==========================================================================
-     8. JAVASCRIPT ES6+ (LOGICA, DADOS MODULARES E INTERAÇÕES)
-     ========================================================================== -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-
-      /* ----------------------------------------------------------------------
-         A. DADOS MODULARES DA APLICAÇÃO (FACILIDADE DE EDIÇÃO E EXPANSÃO)
-         ---------------------------------------------------------------------- */
-
-      // 1. SKILLS (Adicione ou remova objetos para alterar a grade)
-      const skillsData = [
-        { name: 'HTML5/CSS3', icon: 'fa-brands fa-html5' },
-        { name: 'JavaScript ES6+', icon: 'fa-brands fa-js' },
-        { name: 'React / Next.js', icon: 'fa-brands fa-react' },
-        { name: 'TypeScript', icon: 'fa-solid fa-code' },
-        { name: 'UI/UX & Figma', icon: 'fa-brands fa-figma' },
-        { name: 'Tailwind CSS', icon: 'fa-solid fa-palette' },
-        { name: 'Node.js', icon: 'fa-brands fa-node-js' },
-        { name: 'Git & GitHub', icon: 'fa-brands fa-github' }
-      ];
-
-      // 2. EXPERIÊNCIAS PROFISSIONAIS (Adicione novos objetos facilmente)
-      const experiencesData = [
-        {
-          period: '2024 - Presente',
-          role: 'Engenheiro de Software Front-End Sênior',
-          company: 'JCG studio / Tech Solutions Global',
-          description: 'Liderança do time de desenvolvimento front-end na criação de arquiteturas modulares, Design Systems baseados em Web Components e otimização de performance para Web Vitals em 2026.',
-          tags: ['React', 'TypeScript', 'Design Systems', 'Performance']
-        },
-        {
-          period: '2022 - 2024',
-          role: 'UI/UX Designer & Dev Tech Lead',
-          company: 'Creative Interactive Agency',
-          description: 'Criação de protótipos de alta fidelidade em Figma e codificação de interfaces altamente responsivas com foco em micro-interações e acessibilidade (WCAG 2.2).',
-          tags: ['Figma', 'JavaScript ES6+', 'CSS Variables', 'Micro-interactions']
-        },
-        {
-          period: '2019 - 2022',
-          role: 'Desenvolvedor Front-End Pleno',
-          company: 'Digital Innovation Lab',
-          description: 'Desenvolvimento de SPAs escaláveis, integração de APIs RESTful e otimização contínua da jornada do usuário com taxas de conversão aprimoradas.',
-          tags: ['Vue.js', 'REST APIs', 'Sass', 'Webpack']
-        }
-      ];
-
-      // 3. PROJETOS (Copie e cole um bloco para adicionar novo projeto)
-      const projectsData = [
-        {
-          id: 1,
-          title: 'Plataforma SaaS FinTech 2026',
-          category: 'web',
-          description: 'Dashboard financeiro com análise preditiva via IA, visualização de gráficos dinâmicos em tempo real e tema Dark Mode nativo.',
-          image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
-          tags: ['React', 'ChartJS', 'Tailwind', 'SaaS'],
-          demoLink: '#',
-          githubLink: '#'
-        },
-        {
-          id: 2,
-          title: 'Design System Imersivo Glass',
-          category: 'uiux',
-          description: 'Biblioteca completa de componentes UI com estética moderna Glassmorphism, animações fluídas e tokens de design customizáveis.',
-          image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
-          tags: ['Figma', 'Design System', 'Glassmorphism', 'UI/UX'],
-          demoLink: '#',
-          githubLink: '#'
-        },
-        {
-          id: 3,
-          title: 'App de Gestão de Saúde Mobile',
-          category: 'mobile',
-          description: 'Aplicativo mobile para monitoramento de rotina e bem-estar com integração a dispositivos vestíveis (Wearables).',
-          image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80',
-          tags: ['React Native', 'Mobile', 'UI/UX', 'HealthTech'],
-          demoLink: '#',
-          githubLink: '#'
-        },
-        {
-          id: 4,
-          title: 'Automação de Workflow CI/CD',
-          category: 'automation',
-          description: 'Bot de automação e pipeline customizado para verificação de acessibilidade e qualidade de código no deploy.',
-          image: 'https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=800&q=80',
-          tags: ['Node.js', 'GitHub Actions', 'Automation'],
-          demoLink: '#',
-          githubLink: '#'
-        }
-      ];
-
-
-      /* ----------------------------------------------------------------------
-         B. RENDERIZAÇÃO DINÂMICA
-         ---------------------------------------------------------------------- */
-
-      // Renderizar Skills
-      const skillsGrid = document.getElementById('skills-grid');
-      skillsData.forEach(skill => {
-        const skillEl = document.createElement('div');
-        skillEl.className = 'skill-card';
-        skillEl.innerHTML = `
-          <i class="${skill.icon}"></i>
-          <span>${skill.name}</span>
-        `;
-        skillsGrid.appendChild(skillEl);
-      });
-
-      // Renderizar Timeline de Experiências
-      const timelineContainer = document.getElementById('timeline-container');
-      experiencesData.forEach(exp => {
-        const expEl = document.createElement('div');
-        expEl.className = 'timeline-item';
-        expEl.innerHTML = `
-          <div class="timeline-dot"></div>
-          <div class="glass-card timeline-content">
-            <span class="timeline-date">${exp.period}</span>
-            <h3 class="timeline-role">${exp.role}</h3>
-            <div class="timeline-company">${exp.company}</div>
-            <p class="timeline-description">${exp.description}</p>
-            <div class="timeline-tags">
-              ${exp.tags.map(tag => `<span class="tech-tag">${tag}</span>`).join('')}
-            </div>
-          </div>
-        `;
-        timelineContainer.appendChild(expEl);
-      });
-
-      // Renderizar Projetos
-      const projectsGrid = document.getElementById('projects-grid');
-      function renderProjects(projects) {
-        projectsGrid.innerHTML = '';
-        projects.forEach(project => {
-          const card = document.createElement('div');
-          card.className = `glass-card project-card`;
-          card.setAttribute('data-category', project.category);
-          card.innerHTML = `
-            <div class="project-img-wrapper">
-              <img src="${project.image}" alt="${project.title}" class="project-img" loading="lazy">
-              <div class="project-overlay">
-                <a href="${project.demoLink}" target="_blank" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Demo <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                <a href="${project.githubLink}" target="_blank" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Code <i class="fa-brands fa-github"></i></a>
-              </div>
-            </div>
-            <div class="project-body">
-              <h3 class="project-title">${project.title}</h3>
-              <p class="project-desc">${project.description}</p>
-              <div class="project-footer">
-                <div class="timeline-tags">
-                  ${project.tags.map(tag => `<span class="tech-tag">${tag}</span>`).join('')}
+    <main>
+        <!-- ==========================================================================
+           HERO SECTION (INÍCIO)
+           ========================================================================== -->
+        <section id="inicio" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="fas fa-circle-dot" style="font-size: 0.6rem;"></i> Disponível para novos projetos
+                    </div>
+                    <h1>Olá, eu sou <br><span style="color: var(--primary);">Caio Felipe Braga de Oliveira</span></h1>
+                    <div class="hero-subtitle">
+                        &gt; <span id="typed-text"></span>
+                    </div>
+                    <p class="hero-description">
+                        <i class="fas fa-location-dot" style="color: var(--primary);"></i> Sarandi - PR, Brasil | Criando experiências web de alta performance e automações inteligentes.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#contato" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Entre em Contato
+                        </a>
+                        <a href="#projetos" class="btn btn-secondary">
+                            <i class="fas fa-code"></i> Ver Projetos
+                        </a>
+                    </div>
                 </div>
-              </div>
             </div>
-          `;
-          projectsGrid.appendChild(card);
-        });
-      }
-      renderProjects(projectsData);
+        </section>
 
+        <!-- ==========================================================================
+           SOBRE MIM
+           ========================================================================== -->
+        <section id="sobre" class="container">
+            <h2 class="section-title">Sobre <span>Mim</span></h2>
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3><i class="fas fa-user-gear"></i> Detalhes Pessoais</h3>
+                    <ul class="info-list">
+                        <li class="info-item">
+                            <span class="info-label">Nome</span>
+                            <span class="info-value">Caio Felipe</span>
+                        </li>
+                        <li class="info-item">
+                            <span class="info-label">Idade</span>
+                            <span class="info-value"><span id="idade"></span> anos</span>
+                        </li>
+                        <li class="info-item">
+                            <span class="info-label">Localização</span>
+                            <span class="info-value">Sarandi - PR</span>
+                        </li>
+                        <li class="info-item">
+                            <span class="info-label">Formação</span>
+                            <span class="info-value"><a href="https://unicive.com/courses/engenharia-de-software/" target="_blank">Unicive (ESW) <i class="fas fa-external-link-alt" style="font-size: 0.7rem;"></i></a></span>
+                        </li>
+                        <li class="info-item">
+                            <span class="info-label">Cargo Atual</span>
+                            <span class="info-value">Desenvolvedor</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="about-text">
+                    <p>
+                        Sou um desenvolvedor apaixonado por tecnologia, focado na criação de interfaces modernas, sistemas web eficientes e automações robustas. Atualmente, aprofundo meus conhecimentos acadêmicos cursando o Bacharelado em <strong>Engenharia de Software</strong> na Unicive.
+                    </p>
+                    <p>
+                        Meu compromisso é unir design de excelência (UI/UX) com código limpo e escalável, entregando soluções digitais que superam expectativas e resolvem problemas reais.
+                    </p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">HTML5 / CSS3</span>
+                        <span class="tech-tag">JavaScript (ES6+)</span>
+                        <span class="tech-tag">React / Front-End</span>
+                        <span class="tech-tag">UI/UX Design</span>
+                        <span class="tech-tag">Automação & Bots</span>
+                        <span class="tech-tag">Git / GitHub</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      /* ----------------------------------------------------------------------
-         C. EFEITO DE DIGITAÇÃO AUTOMÁTICA (TYPEWRITER EFFECT)
-         ---------------------------------------------------------------------- */
-      const typewriterText = document.getElementById('typewriter-text');
-      const phrases = [
-        'Engenheiro de Software Front-End',
-        'UI/UX Designer Sênior',
-        'Especialista em Design System',
-        'Creative Technologist'
-      ];
-      let phraseIndex = 0;
-      let charIndex = 0;
-      let isDeleting = false;
+        <!-- ==========================================================================
+           4. EXPERIÊNCIAS PROFISSIONAIS (Timeline Modular)
+           ========================================================================== -->
+        <section id="experiencias" class="container">
+            <h2 class="section-title">Experiências <span>Profissionais</span></h2>
+            
+            <!-- 
+              INSTRUÇÃO DE MANUTENÇÃO (EXPERIÊNCIAS):
+              Para adicionar uma nova experiência, basta duplicar o bloco <div class="timeline-item"> abaixo 
+              ou gerenciar via array JavaScript se preferir renderização dinâmica.
+            -->
+            <div class="timeline" id="timeline-container">
+                <!-- Inserido dinamicamente via JS ou estático -->
+            </div>
+        </section>
 
-      function typeLoop() {
-        const currentPhrase = phrases[phraseIndex];
-        
-        if (isDeleting) {
-          typewriterText.textContent = currentPhrase.substring(0, charIndex - 1);
-          charIndex--;
-        } else {
-          typewriterText.textContent = currentPhrase.substring(0, charIndex + 1);
-          charIndex++;
-        }
+        <!-- ==========================================================================
+           5. PROJETOS (Modular e Filtrável)
+           ========================================================================== -->
+        <section id="projetos" class="container">
+            <h2 class="section-title">Meus <span>Projetos</span></h2>
+            
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="web">Web</button>
+                <button class="filter-btn" data-filter="automacao">Automação</button>
+                <button class="filter-btn" data-filter="bots">Bots</button>
+            </div>
 
-        let speed = isDeleting ? 40 : 80;
+            <div class="projects-grid" id="projects-grid">
+                <!-- Os projetos são renderizados dinamicamente pelo array JS abaixo -->
+            </div>
+        </section>
 
-        if (!isDeleting && charIndex === currentPhrase.length) {
-          speed = 2000; // Pausa no final da frase
-          isDeleting = true;
-        } else if (isDeleting && charIndex === 0) {
-          isDeleting = false;
-          phraseIndex = (phraseIndex + 1) % phrases.length;
-          speed = 500;
-        }
+        <!-- ==========================================================================
+           6. CONTATO (DESTAQUE MÁXIMO)
+           ========================================================================== -->
+        <section id="contato" class="container">
+            <h2 class="section-title">Vamos <span>Conversar?</span></h2>
+            <div class="contact-grid">
+                <div class="contact-info-cards">
+                    <a href="https://api.whatsapp.com/send?phone=5544999448380" target="_blank" class="contact-card-item">
+                        <div class="contact-card-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div class="contact-card-details">
+                            <h4>WhatsApp</h4>
+                            <p>(44) 99944-8380</p>
+                        </div>
+                    </a>
 
-        setTimeout(typeLoop, speed);
-      }
-      typeLoop();
+                    <a href="mailto:jcg.code.studio@gmail.com" class="contact-card-item">
+                        <div class="contact-card-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="contact-card-details">
+                            <h4>E-mail Profissional</h4>
+                            <p>jcg.code.studio@gmail.com</p>
+                        </div>
+                    </a>
 
+                    <a href="https://linkedin.com" target="_blank" class="contact-card-item">
+                        <div class="contact-card-icon"><i class="fab fa-linkedin-in"></i></div>
+                        <div class="contact-card-details">
+                            <h4>LinkedIn</h4>
+                            <p>Caio Felipe Braga de Oliveira</p>
+                        </div>
+                    </a>
 
-      /* ----------------------------------------------------------------------
-         D. FILTRO DE PROJETOS EM JS
-         ---------------------------------------------------------------------- */
-      const filterBtns = document.querySelectorAll('.filter-btn');
-      filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          filterBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+                    <a href="https://github.com" target="_blank" class="contact-card-item">
+                        <div class="contact-card-icon"><i class="fab fa-github"></i></div>
+                        <div class="contact-card-details">
+                            <h4>GitHub</h4>
+                            <p>@jcg-code</p>
+                        </div>
+                    </a>
 
-          const filter = btn.getAttribute('data-filter');
-          if (filter === 'all') {
-            renderProjects(projectsData);
-          } else {
-            const filtered = projectsData.filter(p => p.category === filter);
-            renderProjects(filtered);
-          }
-        });
-      });
+                    <a href="https://instagram.com" target="_blank" class="contact-card-item">
+                        <div class="contact-card-icon"><i class="fab fa-instagram"></i></div>
+                        <div class="contact-card-details">
+                            <h4>Instagram</h4>
+                            <p>@jcg.code</p>
+                        </div>
+                    </a>
+                </div>
 
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Seu Nome</label>
+                            <input type="text" id="name" class="form-input" placeholder="Ex: Maria Silva" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="email">Seu E-mail</label>
+                            <input type="email" id="email" class="form-input" placeholder="exemplo@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="subject">Assunto</label>
+                            <input type="text" id="subject" class="form-input" placeholder="Assunto da mensagem" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="message">Mensagem</label>
+                            <textarea id="message" class="form-textarea" placeholder="Escreva sua mensagem aqui..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i> Enviar Mensagem
+                        </button>
+                        <div id="formFeedback" class="form-feedback"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
 
-      /* ----------------------------------------------------------------------
-         E. NAVEGAÇÃO, HEADER FIXO & ACTIVE INDICATOR ON SCROLL
-         ---------------------------------------------------------------------- */
-      const header = document.getElementById('header');
-      const backToTopBtn = document.getElementById('back-to-top');
-      const navLinks = document.querySelectorAll('.nav-link');
-      const sections = document.querySelectorAll('section');
+    <!-- ==========================================================================
+       7. FOOTER
+       ========================================================================== -->
+    <footer>
+        <div class="container">
+            <p>Copyright &copy; 2026 JCG - <span>Caio Felipe Braga de Oliveira</span>. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
-      window.addEventListener('scroll', () => {
-        // Scroll Header styling
-        if (window.scrollY > 50) {
-          header.classList.add('scrolled');
-          backToTopBtn.classList.add('visible');
-        } else {
-          header.classList.remove('scrolled');
-          backToTopBtn.classList.remove('visible');
-        }
+    <!-- ==========================================================================
+       JAVASCRIPT PURO (ES6+)
+       ========================================================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
 
-        // Active Section Highlight
-        let currentSection = '';
-        sections.forEach(section => {
-          const sectionTop = section.offsetTop - 120;
-          if (window.scrollY >= sectionTop) {
-            currentSection = section.getAttribute('id');
-          }
-        });
+            // --- 1. CÁLCULO DINÂMICO DA IDADE (Nascimento: 10/06/2007) ---
+            const calculateAge = (birthDateString) => {
+                const birthDate = new Date(birthDateString);
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                return age;
+            };
+            document.getElementById('idade').textContent = calculateAge('2007-06-10');
 
-        navLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('href') === `#${currentSection}`) {
-            link.classList.add('active');
-          }
-        });
-      });
+            // --- 2. EFEITO DE DIGITAÇÃO AUTOMÁTICA (HERO) ---
+            const words = ["Desenvolvedor", "Front-End Engineer", "UI/UX Designer", "Especialista em Automação"];
+            let i = 0;
+            let timer;
 
-      // Voltar ao topo suavemente
-      backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-
-      // Mobile Menu Toggle
-      const mobileToggle = document.getElementById('mobile-toggle');
-      const navMenu = document.getElementById('nav-menu');
-
-      mobileToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-      });
-
-      navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          navMenu.classList.remove('active');
-        });
-      });
-
-
-      /* ----------------------------------------------------------------------
-         F. ANIMAÇÃO DE NÚMEROS (CONTADORES DE ESTATÍSTICAS)
-         ---------------------------------------------------------------------- */
-      const statNumbers = document.querySelectorAll('.stat-number');
-      let animatedStats = false;
-
-      function animateStats() {
-        statNumbers.forEach(stat => {
-          const target = +stat.getAttribute('data-target');
-          let count = 0;
-          const speed = target / 50;
-
-          const updateCount = () => {
-            count += speed;
-            if (count < target) {
-              stat.innerText = Math.ceil(count);
-              setTimeout(updateCount, 30);
-            } else {
-              stat.innerText = target + '+';
+            function typingEffect() {
+                let word = words[i].split("");
+                var loopTyping = function() {
+                    if (word.length > 0) {
+                        document.getElementById('typed-text').innerHTML += word.shift();
+                    } else {
+                        setTimeout(deletingEffect, 2000);
+                        return;
+                    }
+                    timer = setTimeout(loopTyping, 100);
+                };
+                loopTyping();
             }
-          };
-          updateCount();
+
+            function deletingEffect() {
+                let word = words[i].split("");
+                var loopDeleting = function() {
+                    if (word.length > 0) {
+                        word.pop();
+                        document.getElementById('typed-text').innerHTML = word.join("");
+                    } else {
+                        i = (i + 1) % words.length;
+                        setTimeout(typingEffect, 500);
+                        return;
+                    }
+                    timer = setTimeout(loopDeleting, 50);
+                };
+                loopDeleting();
+            }
+            typingEffect();
+
+            // --- 3. MENU MOBILE HAMBURGER ---
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+
+            hamburger.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                hamburger.querySelector('i').classList.toggle('fa-bars');
+                hamburger.querySelector('i').classList.toggle('fa-xmark');
+            });
+
+            document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                hamburger.querySelector('i').classList.add('fa-bars');
+                hamburger.querySelector('i').classList.remove('fa-xmark');
+            }));
+
+            // --- 4. ARRAY DE EXPERIÊNCIAS PROFISSIONAIS (Módulo Fácil de Adicionar) ---
+            /* 
+              COMO ADICIONAR NOVA EXPERIÊNCIA:
+              Basta adicionar um novo objeto ao array abaixo com as propriedades solicitadas.
+            */
+            const experiencesData = [
+                {
+                    date: "2025 - Presente",
+                    title: "Desenvolvedor Front-End & Criador de Soluções",
+                    company: "JCG Code Studio",
+                    description: "Desenvolvimento de interfaces modernas, landing pages de alta conversão, sistemas web responsivos e automações personalizadas."
+                },
+                {
+                    date: "2024 - 2025",
+                    title: "Estudante de Engenharia de Software",
+                    company: "Unicive",
+                    description: "Aprofundamento em fundamentos de arquitetura de software, algoritmos, engenharia de requisitos e boas práticas de desenvolvimento."
+                }
+            ];
+
+            const timelineContainer = document.getElementById('timeline-container');
+            experiencesData.forEach(exp => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.innerHTML = `
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">${exp.date}</div>
+                        <h3 class="timeline-title">${exp.title}</h3>
+                        <div class="timeline-company">${exp.company}</div>
+                        <p class="timeline-desc">${exp.description}</p>
+                    </div>
+                `;
+                timelineContainer.appendChild(item);
+            });
+
+            // --- 5. ARRAY DE PROJETOS (Módulo Filtrável) ---
+            /* 
+              COMO ADICIONAR NOVO PROJETO:
+              Adicione um novo objeto no array abaixo especificando 'category' ('web', 'automacao', ou 'bots'),
+              'title', 'description', 'tags' e os links correspondentes.
+            */
+            const projectsData = [
+                {
+                    category: "web",
+                    icon: "fas fa-laptop-code",
+                    title: "JCG Portfolio Studio 2026",
+                    description: "Landing page pessoal desenvolvida com design futurista, glassmorphism, modo escuro nativo e animações fluidas.",
+                    tags: ["HTML5", "CSS3", "JavaScript"],
+                    github: "#",
+                    live: "#"
+                },
+                {
+                    category: "automacao",
+                    icon: "fas fa-cogs",
+                    title: "Sistema de Automação de Tarefas",
+                    description: "Script inteligente para otimização de fluxos de trabalho e integração de dados corporativos em tempo real.",
+                    tags: ["JavaScript", "Node.js", "API"],
+                    github: "#",
+                    live: "#"
+                },
+                {
+                    category: "bots",
+                    icon: "fas fa-robot",
+                    title: "Bot de Atendimento Inteligente",
+                    description: "Chatbot automatizado para WhatsApp integrado com inteligência artificial para suporte e triagem de leads.",
+                    tags: ["JavaScript", "WhatsApp API", "AI"],
+                    github: "#",
+                    live: "#"
+                }
+            ];
+
+            const projectsGrid = document.getElementById('projects-grid');
+
+            function renderProjects(filter = 'all') {
+                projectsGrid.innerHTML = '';
+                const filtered = filter === 'all' 
+                    ? projectsData 
+                    : projectsData.filter(p => p.category === filter);
+
+                filtered.forEach(project => {
+                    const card = document.createElement('div');
+                    card.className = 'project-card';
+                    card.innerHTML = `
+                        <div class="project-header">
+                            <div class="project-icon"><i class="${project.icon}"></i></div>
+                            <div class="project-links">
+                                <a href="${project.github}" target="_blank" title="Repositório"><i class="fab fa-github"></i></a>
+                                <a href="${project.live}" target="_blank" title="Ver Projeto"><i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <div class="project-body">
+                            <div>
+                                <h3 class="project-title">${project.title}</h3>
+                                <p class="project-desc">${project.description}</p>
+                            </div>
+                            <div class="project-tags">
+                                ${project.tags.map(tag => `<span class="project-tag">\${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                    projectsGrid.appendChild(card);
+                });
+            }
+
+            renderProjects();
+
+            // Filtros de Projetos
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const category = btn.getAttribute('data-filter');
+                    renderProjects(category);
+                });
+            });
+
+            // --- 6. VALIDAÇÃO E ENVIO DO FORMULÁRIO DE CONTATO ---
+            const contactForm = document.getElementById('contactForm');
+            const formFeedback = document.getElementById('formFeedback');
+
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const subject = document.getElementById('subject').value.trim();
+                const message = document.getElementById('message').value.trim();
+
+                if(!name || !email || !subject || !message) {
+                    formFeedback.style.display = 'block';
+                    formFeedback.style.color = '#ff6b6b';
+                    formFeedback.textContent = 'Por favor, preencha todos os campos.';
+                    return;
+                }
+
+                // Simulação de envio bem-sucedido
+                formFeedback.style.display = 'block';
+                formFeedback.style.color = 'var(--primary)';
+                formFeedback.textContent = 'Mensagem enviada com sucesso! Entraremos em contato em breve.';
+                contactForm.reset();
+
+                setTimeout(() => {
+                    formFeedback.style.display = 'none';
+                }, 5000);
+            });
+
         });
-      }
-
-      // Observer para ativar contador quando visível
-      const statsSection = document.querySelector('.stats-grid');
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && !animatedStats) {
-          animateStats();
-          animatedStats = true;
-        }
-      }, { threshold: 0.5 });
-
-      if (statsSection) observer.observe(statsSection);
-
-
-      /* ----------------------------------------------------------------------
-         G. VALIDAÇÃO DINÂMICA DO FORMULÁRIO DE CONTATO
-         ---------------------------------------------------------------------- */
-      const contactForm = document.getElementById('contact-form');
-      const formStatus = document.getElementById('form-status');
-
-      function validateInput(input, group) {
-        const value = input.value.trim();
-        let isValid = true;
-
-        if (input.type === 'email') {
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          isValid = emailRegex.test(value);
-        } else {
-          isValid = value.length > 0;
-        }
-
-        if (isValid) {
-          group.classList.remove('error');
-          group.classList.add('success');
-        } else {
-          group.classList.remove('success');
-          group.classList.add('error');
-        }
-
-        return isValid;
-      }
-
-      // Inputs real-time listener
-      ['name', 'email', 'subject', 'message'].forEach(id => {
-        const input = document.getElementById(id);
-        const group = document.getElementById(`group-${id}`);
-
-        input.addEventListener('input', () => {
-          validateInput(input, group);
-        });
-      });
-
-      // Submit Handler
-      contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        const isNameValid = validateInput(document.getElementById('name'), document.getElementById('group-name'));
-        const isEmailValid = validateInput(document.getElementById('email'), document.getElementById('group-email'));
-        const isSubjectValid = validateInput(document.getElementById('subject'), document.getElementById('group-subject'));
-        const isMessageValid = validateInput(document.getElementById('message'), document.getElementById('group-message'));
-
-        if (isNameValid && isEmailValid && isSubjectValid && isMessageValid) {
-          formStatus.className = 'form-status success';
-          formStatus.textContent = ' Mensagem enviada com sucesso! Entrarei em contato em breve.';
-          contactForm.reset();
-
-          // Reset status classes
-          document.querySelectorAll('.form-group').forEach(g => {
-            g.classList.remove('success', 'error');
-          });
-
-          setTimeout(() => {
-            formStatus.style.display = 'none';
-          }, 5000);
-        } else {
-          formStatus.className = 'form-status';
-          formStatus.style.display = 'block';
-          formStatus.style.background = 'rgba(255, 71, 87, 0.15)';
-          formStatus.style.border = '1px solid #ff4757';
-          formStatus.style.color = '#ff4757';
-          formStatus.textContent = ' Por favor, preencha todos os campos corretamente.';
-        }
-      });
-
-    });
-  </script>
+    </script>
 </body>
 </html>
